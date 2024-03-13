@@ -5,9 +5,7 @@
 package com.mycompany.finalprojectpokedex;
 
 import com.github.oscar0812.pokeapi.models.pokemon.Pokemon;
-import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -79,9 +77,10 @@ public class PokedexGUI extends javax.swing.JPanel {
             if (spriteUrl != null && !spriteUrl.isEmpty()) {
                 try {
                     BufferedImage bi = ImageIO.read(new URL(spriteUrl));
-                    ImageIcon icon = new ImageIcon(bi.getScaledInstance(bi.getWidth() * 2, bi.getHeight() * 2, BufferedImage.SCALE_SMOOTH));
-                    pokemonImage.setMaximumSize(new Dimension(icon.getIconWidth(), icon.getIconHeight()));
-                    pokemonImage.setIcon(icon);
+//                    ImageIcon icon = new ImageIcon(bi.getScaledInstance(bi.getWidth() * 2, bi.getHeight() * 2, BufferedImage.SCALE_SMOOTH));
+//                    pokemonImage.setMaximumSize(new Dimension(icon.getIconWidth(), icon.getIconHeight()));
+//                    pokemonImage.setIcon(icon);
+                    updateImage(bi);
                 } catch (MalformedURLException ex) {
                     Logger.getLogger(PokedexGUI.class.getName()).log(Level.SEVERE, null, ex);
                     JOptionPane.showMessageDialog(this, "No new image available for this Pokémon!", "Image Error", JOptionPane.ERROR_MESSAGE);
@@ -98,7 +97,12 @@ public class PokedexGUI extends javax.swing.JPanel {
             }
         }
     }
-    
+    private void updateImage(BufferedImage bi){
+        ImageIcon icon = new ImageIcon(bi.getScaledInstance(-1, pokemonImage.getHeight(), BufferedImage.SCALE_SMOOTH));
+        pokemonImage.setIcon(icon);
+        pokemonImage.repaint();
+        pokemonImage.revalidate();
+    }
     private void updateTypeEffectivenessLists(List<String> types) {
         DefaultListModel<String> strengthsModel = new DefaultListModel<>();
         DefaultListModel<String> weaknessesModel = new DefaultListModel<>();
@@ -201,10 +205,11 @@ public class PokedexGUI extends javax.swing.JPanel {
     private void setPokemonImage(String spriteUrl) {
         try {
             BufferedImage originalImage = ImageIO.read(new URL(spriteUrl));
-            BufferedImage combinedImage = new BufferedImage(originalImage.getWidth() * 2, originalImage.getHeight() * 2, BufferedImage.TYPE_INT_ARGB);
-            ImageIcon icon = new ImageIcon(combinedImage);
-            pokemonImage.setIcon(icon);
-            pokemonImage.setMaximumSize(new Dimension(icon.getIconWidth(), icon.getIconHeight()));
+//            BufferedImage combinedImage = new BufferedImage(originalImage.getWidth() * 2, originalImage.getHeight() * 2, BufferedImage.TYPE_INT_ARGB);
+//            ImageIcon icon = new ImageIcon(combinedImage);
+//            pokemonImage.setIcon(icon);
+//            pokemonImage.setMaximumSize(new Dimension(icon.getIconWidth(), icon.getIconHeight()));
+            updateImage(originalImage);
         } catch (IOException ex) {
             Logger.getLogger(PokedexGUI.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -560,10 +565,7 @@ public class PokedexGUI extends javax.swing.JPanel {
                     if (spriteUrl != null && !spriteUrl.isEmpty()) {
                         try {
                             BufferedImage bi = ImageIO.read(new URL(spriteUrl));
-                            ImageIcon icon = new ImageIcon(bi.getScaledInstance(-1, pokemonImage.getHeight(), BufferedImage.SCALE_SMOOTH));
-                            pokemonImage.setIcon(icon);
-                            pokemonImage.repaint();
-                            pokemonImage.revalidate();
+                            updateImage(bi);
                         } catch (IOException ex) {
                             Logger.getLogger(PokedexGUI.class.getName()).log(Level.SEVERE, null, ex);
                             JOptionPane.showMessageDialog(null, "Error loading shiny sprite.", "Image Error", JOptionPane.ERROR_MESSAGE);
